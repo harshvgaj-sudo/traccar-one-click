@@ -1,6 +1,15 @@
 @echo off
 setlocal EnableExtensions
 title Traccar One-Click Setup
+
+REM ---- SELF-ELEVATE: service install + firewall rules need Administrator ----
+net session >nul 2>&1
+if not %errorlevel%==0 (
+    echo Requesting Administrator rights - one UAC prompt...
+    powershell -NoProfile -Command "Start-Process -FilePath '%~f0' -Verb RunAs"
+    exit /b
+)
+
 REM ============================================================
 REM  TRACCAR PERSONAL TRACKER - ONE-CLICK SETUP (2026-10-31)
 REM  What this does, in order:
@@ -25,6 +34,13 @@ if %errorlevel%==0 (
     goto tails
 )
 
+set "TZEXE="
+if exist "%~dp0traccar-setup.exe" (
+    echo [OK] Found traccar-setup.exe next to this script - using it (no download).
+    set "TZEXE=%~dp0traccar-setup.exe"
+    goto install
+)
+
 set TZFILE=traccar-windows-64-6.16.0.zip
 set TZURL=https://github.com/traccar/traccar/releases/download/v6.16.0/traccar-windows-64-6.16.0.zip
 
@@ -44,8 +60,9 @@ if exist "%TEMP%\traccar-setup\traccar-setup.exe" (
     for /r "%TEMP%\traccar-setup" %%f in (traccar-setup*.exe) do set "TZEXE=%%f"
 )
 
+:install
 if not defined TZEXE (
-    echo [ERROR] Installer not found inside the zip.
+    echo [ERROR] Installer not found.
     pause
     exit /b 1
 )
@@ -76,6 +93,13 @@ if %errorlevel%==0 (
     goto startsvc
 )
 
+if exist "%~dp0tailscale-setup.exe" (
+    echo [OK] Found tailscale-setup.exe next to this script - using it (no download).
+    "%~dp0tailscale-setup.exe" /quiet /norestart
+    timeout /t 5 /nobreak >nul
+    goto startsvc
+)
+
 where winget >nul 2>&1
 if %errorlevel%==0 (
     echo Installing Tailscale via winget...
@@ -99,6 +123,15 @@ echo   STEP 3 of 3 : START EVERYTHING
 echo ============================================
 
 net start traccar 2>nul
+
+REM ---- FIREWALL HARDENING: only localhost + Tailscale may reach the dashboard ----
+REM Blocks LAN/Wi-Fi devices from port 8082 even if Windows offers Java an allow rule.
+echo Hardening firewall: blocking LAN access to port 8082...
+netsh advfirewall firewall delete rule name="Traccar 8082 LAN block v4" >nul 2>&1
+netsh advfirewall firewall add rule name="Traccar 8082 LAN block v4" dir=in action=block protocol=TCP localport=8082 remoteip=10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,169.254.0.0/16 >nul
+netsh advfirewall firewall delete rule name="Traccar 8082 LAN block v6" >nul 2>&1
+netsh advfirewall firewall add rule name="Traccar 8082 LAN block v6" dir=in action=block protocol=TCP localport=8082 remoteip=fe80::/10,fc00::/7 >nul 2>&1
+echo [OK] Port 8082 reachable ONLY from this PC and your Tailscale devices.
 
 set "TSCMD=tailscale"
 if exist "%ProgramFiles%\Tailscale\tailscale.exe" set "TSCMD=%ProgramFiles%\Tailscale\tailscale.exe"

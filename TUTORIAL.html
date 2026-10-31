@@ -175,6 +175,19 @@
   <p class="sub">Privacy: the phone app sends location ONLY to the address you type — in this setup, your own PC on your own private network. No third party, no Google, no analytics.</p>
 </div>
 
+<div class="card">
+  <h2>Is it secure? (audited 31 Oct 2026)</h2>
+  <table>
+    <tr><th>Check</th><th>Result</th></tr>
+    <tr><td>Phone APKs authentic?</td><td><span class="k">Yes</span> — Traccar Client sha256 matches the hash published with the release; Colota is signed by F-Droid.</td></tr>
+    <tr><td>PC installers signed?</td><td>Tailscale: valid Tailscale Inc. signature. Traccar: unsigned (upstream choice) — the exact sha256 is pinned in the README so a tampered file is detectable.</td></tr>
+    <tr><td>Can strangers reach the dashboard?</td><td><span class="k">No</span> — the setup adds firewall rules blocking every LAN range on port 8082. Only this PC and your Tailscale devices can connect. No port forwarding, nothing on the public internet.</td></tr>
+    <tr><td>Is traffic encrypted?</td><td>Yes — WireGuard-encrypted inside Tailscale, end to end.</td></tr>
+    <tr><td>Viewer code (Simple View) XSS-safe?</td><td><span class="k">Audited</span> — one dynamic output sink, all device data HTML-escaped; CDN scripts pinned with integrity hashes.</td></tr>
+    <tr><td>Weakest point</td><td>The dashboard password — that's why Step 2 forces you to change <code>admin/admin</code> first.</td></tr>
+  </table>
+</div>
+
 <p class="foot">Generated 2026-10-31 · Traccar is Apache-2.0 · Tailscale client is open source · Setup scripts by WorkBuddy</p>
 </div>
 </body>

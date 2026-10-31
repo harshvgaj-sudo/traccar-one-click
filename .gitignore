@@ -1,0 +1,5 @@
+# Binaries stay local-only: GitHub blocks files >100 MB and this kit
+# ships them alongside the scripts. Download links live in README.md.
+*.zip
+*.exe
+*.apk

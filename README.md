@@ -77,6 +77,31 @@ The server runs on your PC. **PC on = live tracking. PC off/asleep = live view p
 
 Track **your own devices**, or other people only with their knowledge and consent. Covert tracking of another person's phone or vehicle is a criminal offence in many jurisdictions (in India: IPC §354D stalking, up to 3 years). This kit is built for families who all agree to share — the mutual-consent model.
 
+## Security audit (2026-10-31)
+
+**File authenticity — measured, hashes pinned so tampering is detectable:**
+
+| File | Size (B) | sha256 | Signature |
+|---|---|---|---|
+| `traccar-setup.exe` (6.16.0) | 188,277,098 | `23092f77…26f4cf9` | Not signed (upstream ships unsigned) |
+| `tailscale-setup.exe` (1.104.4) | 1,394,992 | `74d30047…4b833d929` | **Valid — Tailscale Inc.** |
+| `Traccar-Client-10.2.4.apk` | 71,458,896 | `4108250e…456897e19` | **Matches upstream-published hash** |
+| `Colota-1.21.0.apk` | 45,888,137 | `0e2834e6…86666b7d` | F-Droid-signed (verified at install) |
+
+**Attack surface found and FIXED in this kit:**
+1. **CDN supply-chain risk** — Leaflet loaded without Subresource Integrity. Fixed: `integrity` hashes pinned for both CSS and JS (a compromised CDN can no longer inject code into Simple View).
+2. **Silent-install failure** — the setup script ran without admin rights. Fixed: self-elevates with one UAC prompt.
+3. **LAN exposure of port 8082** — Traccar binds all interfaces, and Windows often grants Java inbound access on Private networks. Fixed: the installer adds firewall BLOCK rules for all private ranges (v4 + v6) — the dashboard is reachable **only from this PC (localhost) and your Tailscale devices** (100.64/10).
+
+**Threat model after setup:**
+- Who can open the dashboard: this PC + devices signed into YOUR Tailscale tailnet. Nobody else. No ports forwarded to the internet.
+- Traffic inside Tailscale is WireGuard-encrypted end-to-end; plain HTTP inside the tailnet is acceptable.
+- Device-protocol listener ports are disabled by default in Traccar; this kit enables none.
+- The one weak point left is the dashboard password — the setup opens the page to change `admin`/`admin` immediately.
+- Binaries are intentionally NOT committed to git (GitHub blocks >100 MB files); the hashes above are the integrity anchor — re-verify after any re-download.
+
+**Not yet tested (needs the server actually installed):** live probing of the running dashboard — auth brute-force resistance, HTTP header audit, port scan. That is the final verification step, pending the owner's go-ahead.
+
 ## Credits
 
 - [Traccar](https://www.traccar.org/) by Anton Tananaev & contributors — the tracking platform (Apache-2.0)
