@@ -19,6 +19,7 @@
   html,body{height:100%;}
   body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);overflow:hidden;}
   button{font-family:inherit;cursor:pointer;}
+  input{font-family:inherit;}
   .hidden{display:none!important;}
 
   /* ---------- login ---------- */
@@ -34,36 +35,62 @@
 
   /* ---------- shell ---------- */
   #app{display:flex;flex-direction:column;height:100%;}
-  header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line);z-index:1100;}
+  header{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line);z-index:1100;flex-wrap:wrap;}
   header h1{font-size:1rem;font-weight:700;letter-spacing:-.01em;}
   header .spacer{flex:1;}
   .icon-btn{background:var(--panel2);border:1px solid var(--line);color:var(--sub);border-radius:8px;padding:6px 10px;font-size:.8rem;font-weight:600;}
   .icon-btn:hover{color:var(--ink);}
+  .icon-btn.on{border-color:var(--gold);color:var(--gold);}
+  .chip{font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);color:var(--sub);white-space:nowrap;}
+  .chip b{color:var(--ink);}
+  #conn{display:flex;align-items:center;}
   #live-dot{width:9px;height:9px;border-radius:50%;background:var(--good);display:inline-block;margin-right:5px;animation:pulse 2s infinite;}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-  #conn{font-size:.75rem;color:var(--sub);display:flex;align-items:center;}
+  #live-dot.poll{background:var(--warn);animation:none;}
+  #live-dot.off{background:var(--bad);animation:none;}
+  #conn-txt{font-size:.75rem;color:var(--sub);}
 
   #main{flex:1;display:flex;min-height:0;}
-  #sidebar{width:300px;max-width:42vw;background:var(--panel);border-right:1px solid var(--line);overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px;z-index:1000;}
+  #sidebar{width:320px;max-width:42vw;background:var(--panel);border-right:1px solid var(--line);overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px;z-index:1000;}
   #map{flex:1;z-index:1;}
 
+  /* ---------- summary + search ---------- */
+  #summary{display:flex;gap:6px;flex-wrap:wrap;}
+  #search{width:100%;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--ink);font-size:.88rem;}
+  #search:focus{outline:2px solid var(--accent);border-color:transparent;}
+  .sec-title{font-size:.68rem;font-weight:700;letter-spacing:.08em;color:var(--sub);margin:6px 2px 0;}
+
   /* ---------- device cards ---------- */
-  .dev{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;transition:border-color .15s;}
+  .dev{background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--sub);border-radius:12px;padding:11px 13px;cursor:pointer;transition:border-color .15s;}
   .dev:hover{border-color:var(--accent);}
-  .dev.sel{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);}
+  .dev.sel{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold);}
+  .dev.s-online{border-left-color:var(--good);}
+  .dev.s-stale{border-left-color:var(--warn);}
   .dev .row1{display:flex;align-items:center;gap:8px;}
   .dev .name{font-weight:700;font-size:.95rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
   .dot.online{background:var(--good);}
   .dot.offline{background:var(--sub);}
   .dot.stale{background:var(--warn);}
-  .dev .row2{display:flex;gap:14px;margin-top:7px;font-size:.78rem;color:var(--sub);}
+  .dot.moving{background:var(--gold);box-shadow:0 0 0 3px rgba(250,204,21,.25);}
+  .dev .row2{display:flex;gap:14px;margin-top:7px;font-size:.78rem;color:var(--sub);align-items:center;}
   .dev .row2 b{color:var(--ink);font-weight:600;}
+  .batbar{flex:1;height:4px;border-radius:2px;background:var(--line);overflow:hidden;align-self:center;max-width:70px;}
+  .batbar i{display:block;height:100%;background:var(--good);}
   .dev .updated{margin-top:6px;font-size:.75rem;}
   .updated.fresh{color:var(--good);}
   .updated.stale{color:var(--warn);}
   .updated.dead{color:var(--bad);}
   #no-devices{color:var(--sub);font-size:.85rem;text-align:center;padding:30px 10px;line-height:1.6;}
+
+  /* ---------- events feed ---------- */
+  .ev{display:flex;align-items:baseline;gap:8px;padding:7px 10px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);font-size:.78rem;}
+  .ev .et{font-weight:700;flex-shrink:0;}
+  .ev .en{color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;}
+  .ev .ew{color:var(--sub);flex-shrink:0;}
+  .ev.t-motion .et{color:var(--gold);}
+  .ev.t-geofence .et{color:var(--accent);}
+  .ev.t-online .et{color:var(--good);}
+  .ev.t-offline .et{color:var(--bad);}
 
   /* ---------- popups ---------- */
   .leaflet-popup-content-wrapper{background:var(--panel);color:var(--ink);border-radius:12px;}
@@ -74,7 +101,7 @@
   .pv{font-weight:700;}
 
   @media (max-width:640px){
-    #sidebar{position:fixed;left:0;right:0;bottom:0;top:auto;width:100%;max-width:100%;max-height:38vh;border-right:none;border-top:1px solid var(--line);border-radius:16px 16px 0 0;}
+    #sidebar{position:fixed;left:0;right:0;bottom:0;top:auto;width:100%;max-width:100%;max-height:42vh;border-right:none;border-top:1px solid var(--line);border-radius:16px 16px 0 0;}
     #main{flex-direction:column-reverse;}
   }
 </style>
@@ -97,11 +124,18 @@
     <h1>Simple View</h1>
     <span id="conn"><span id="live-dot"></span><span id="conn-txt">connecting</span></span>
     <span class="spacer"></span>
+    <button class="icon-btn" id="btn-follow" title="Map follows the selected device">Follow: off</button>
     <button class="icon-btn" id="btn-theme" title="Toggle theme">Theme</button>
     <button class="icon-btn" id="btn-logout">Log out</button>
   </header>
   <div id="main">
     <div id="sidebar">
+      <div id="summary"></div>
+      <input type="search" id="search" placeholder="Search devices..." autocomplete="off">
+      <div class="sec-title">DEVICES</div>
+      <div id="devs"></div>
+      <div class="sec-title">RECENT EVENTS</div>
+      <div id="events"></div>
       <div id="no-devices">No devices yet.<br>Add one in the Traccar dashboard first (Devices → + Add), then reload this page.</div>
     </div>
     <div id="map"></div>
@@ -117,7 +151,8 @@
   var POLL_MS   = 15000;       // REST fallback poll interval
 
   var map, markers = {}, devices = {}, positions = {}, selectedId = null;
-  var socket = null, pollTimer = null, fitted = false;
+  var socket = null, pollTimer = null, fitted = false, follow = false;
+  var events = [];
   var $ = function(id){ return document.getElementById(id); };
 
   /* ================= theme ================= */
@@ -135,13 +170,22 @@
     applyTheme();
   });
   function refreshTiles(){
-    // rebuild tile layer so label style matches theme
     if (map._osm) { map.removeLayer(map._osm); }
     map._osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution: "&copy; OpenStreetMap contributors"
     }).addTo(map);
   }
+
+  /* ================= follow mode ================= */
+  $("btn-follow").addEventListener("click", function(){
+    follow = !follow;
+    this.textContent = "Follow: " + (follow ? "on" : "off");
+    this.className = "icon-btn" + (follow ? " on" : "");
+    if (follow && selectedId != null && markers[selectedId]){
+      map.setView(markers[selectedId].getLatLng(), Math.max(map.getZoom(), 15));
+    }
+  });
 
   /* ================= helpers ================= */
   function fmtSpeed(knots){ return (knots && knots > 0) ? Math.round(knots * 1.852) + " km/h" : "stopped"; }
@@ -160,42 +204,56 @@
     if (mins > STALE_MIN) return dev.status === "online" ? "stale" : "offline";
     return "online";
   }
+  function isMoving(pos){ return !!(pos && pos.speed && pos.speed > 0.5); }
   function esc(s){ var d = document.createElement("div"); d.textContent = s == null ? "" : s; return d.innerHTML; }
 
   /* ================= map ================= */
   map = L.map("map", { zoomControl: true, attributionControl: true });
   refreshTiles();
-  map.setView([20.59, 78.96], 4); // India-ish start until devices load
+  map.setView([20.59, 78.96], 4);
 
-  function markerHtml(state){
-    var c = state === "online" ? "var(--good)" : state === "stale" ? "var(--warn)" : "var(--sub)";
+  function markerHtml(state, moving){
+    var c = moving ? "var(--gold)" :
+            state === "online" ? "var(--good)" :
+            state === "stale" ? "var(--warn)" : "var(--sub)";
+    var ring = moving ? "box-shadow:0 0 0 4px rgba(250,204,21,.3);" : "";
     return '<div style="width:16px;height:16px;border-radius:50%;background:' + c +
-           ';border:3px solid var(--panel);box-shadow:0 0 0 2px ' + c + '"></div>';
+           ';border:3px solid var(--panel);' + ring + '"></div>';
   }
   function popupHtml(dev, pos){
     var st = stateOf(dev, pos);
     var bat = pos && pos.attributes && pos.attributes.batteryLevel;
-    return '<div style="min-width:170px">' +
+    var acc = pos && pos.attributes && pos.attributes.accuracy;
+    return '<div style="min-width:180px">' +
       '<div style="font-weight:700;margin-bottom:4px">' + esc(dev.name) + "</div>" +
-      '<div class="pk">Status <span class="pv">' + st + "</span></div>" +
+      '<div class="pk">Status <span class="pv">' + st + (isMoving(pos) ? " (moving)" : "") + "</span></div>" +
       '<div class="pk">Speed <span class="pv">' + fmtSpeed(pos && pos.speed) + "</span></div>" +
       (bat != null ? '<div class="pk">Battery <span class="pv">' + Math.round(bat) + "%</span></div>" : "") +
+      (acc != null ? '<div class="pk">Accuracy <span class="pv">&plusmn;' + Math.round(acc) + " m</span></div>" : "") +
       '<div class="pk">Updated <span class="pv">' + ago(pos && (pos.fixTime || pos.deviceTime)) + "</span></div>" +
       "</div>";
   }
   function upsertMarker(dev, pos){
     if (!pos || pos.latitude == null) return;
     var id = dev.id, latlng = [pos.latitude, pos.longitude];
-    var st = stateOf(dev, pos);
+    var st = stateOf(dev, pos), mv = isMoving(pos);
     if (!markers[id]){
-      markers[id] = L.marker(latlng, { icon: L.divIcon({ html: markerHtml(st), className: "", iconSize:[16,16] }) });
-      markers[id].on("click", function(){ selectDevice(id, true); });
+      markers[id] = L.marker(latlng, { icon: L.divIcon({ html: markerHtml(st, mv), className: "", iconSize:[16,16] }) });
+      markers[id].on("click", function(){ selectDevice(id, false); });
       map.addLayer(markers[id]);
     } else {
       markers[id].setLatLng(latlng);
-      markers[id].setIcon(L.divIcon({ html: markerHtml(st), className: "", iconSize:[16,16] }));
+      markers[id].setIcon(L.divIcon({ html: markerHtml(st, mv), className: "", iconSize:[16,16] }));
     }
     markers[id].bindPopup(popupHtml(dev, pos));
+    if (pos.attributes && pos.attributes.accuracy){
+      if (!markers[id]._acc){
+        markers[id]._acc = L.circle(latlng, { radius: pos.attributes.accuracy, weight: 1, opacity: .35, fillOpacity: .06, color: "#2dd4bf" }).addTo(map);
+      } else {
+        markers[id]._acc.setLatLng(latlng); markers[id]._acc.setRadius(pos.attributes.accuracy);
+      }
+    }
+    if (follow && selectedId == id) map.setView(latlng, map.getZoom());
   }
   function fitAll(){
     var pts = Object.keys(markers).map(function(k){ return markers[k].getLatLng(); });
@@ -203,30 +261,52 @@
   }
 
   /* ================= sidebar ================= */
-  function renderCards(){
-    var box = $("sidebar");
+  function renderSummary(){
     var ids = Object.keys(devices);
-    if (!ids.length) return;
+    var on = 0, stale = 0, off = 0, mv = 0;
+    ids.forEach(function(id){
+      var st = stateOf(devices[id], positions[devices[id].positionId]);
+      if (st === "online") on++; else if (st === "stale") stale++; else off++;
+      if (isMoving(positions[devices[id].positionId])) mv++;
+    });
+    if (!ids.length){ $("summary").innerHTML = ""; return; }
+    $("summary").innerHTML =
+      '<span class="chip"><b>' + ids.length + "</b> devices</span>" +
+      '<span class="chip" style="color:var(--good)"><b>' + on + "</b> online</span>" +
+      (stale ? '<span class="chip" style="color:var(--warn)"><b>' + stale + "</b> stale</span>" : "") +
+      '<span class="chip" style="color:var(--sub)"><b>' + off + "</b> offline</span>" +
+      (mv ? '<span class="chip" style="color:var(--gold)"><b>' + mv + "</b> moving</span>" : "");
+  }
+  function renderCards(){
+    var box = $("devs");
+    var q = ($("search").value || "").toLowerCase();
+    var ids = Object.keys(devices).filter(function(id){
+      return !q || (devices[id].name || "").toLowerCase().indexOf(q) >= 0;
+    });
+    if (!Object.keys(devices).length) return;
     $("no-devices").classList.add("hidden");
     ids.sort(function(a,b){ return (devices[a].name||"").localeCompare(devices[b].name||""); });
+    var html = "";
     ids.forEach(function(id){
       var dev = devices[id], pos = positions[dev.positionId];
-      var st = stateOf(dev, pos), el = $("dev-" + id), bat = pos && pos.attributes && pos.attributes.batteryLevel;
-      if (!el){
-        el = document.createElement("div");
-        el.className = "dev"; el.id = "dev-" + id;
-        el.addEventListener("click", function(){ selectDevice(id, true); });
-        box.appendChild(el);
-      }
-      el.className = "dev" + (selectedId == id ? " sel" : "");
-      el.innerHTML =
-        '<div class="row1"><span class="dot ' + st + '"></span><span class="name">' + esc(dev.name) + "</span></div>" +
-        '<div class="row2"><span>SPEED <b>' + fmtSpeed(pos && pos.speed) + "</b></span>" +
-        (bat != null ? "<span>BAT <b>" + Math.round(bat) + "%</b></span>" : "") + "</div>" +
+      var st = stateOf(dev, pos), bat = pos && pos.attributes && pos.attributes.batteryLevel;
+      var mv = isMoving(pos);
+      var batCell = bat != null
+        ? '<span>BAT <b>' + Math.round(bat) + "%</b></span><span class='batbar'><i style='width:" + Math.max(3,Math.round(bat)) + "%;background:" +
+          (bat > 40 ? "var(--good)" : bat > 15 ? "var(--warn)" : "var(--bad)") + "'></i></span>"
+        : "";
+      html += '<div class="dev s-' + st + (selectedId == id ? " sel" : "") + '" id="dev-' + id + '" data-id="' + id + '">' +
+        '<div class="row1"><span class="dot ' + (mv ? "moving" : st) + '"></span><span class="name">' + esc(dev.name) + "</span></div>" +
+        '<div class="row2"><span>SPEED <b>' + fmtSpeed(pos && pos.speed) + "</b></span>" + batCell + "</div>" +
         '<div class="updated ' + (st === "online" ? "fresh" : st === "stale" ? "stale" : "dead") + '">' +
-        (st === "stale" ? "STALE &middot; " : "") + "updated " + ago(pos && (pos.fixTime || pos.deviceTime)) + "</div>";
-      upsertMarker(dev, pos);
+        (st === "stale" ? "STALE &middot; " : "") + "updated " + ago(pos && (pos.fixTime || pos.deviceTime)) + "</div></div>";
     });
+    box.innerHTML = html;
+    Array.prototype.forEach.call(box.querySelectorAll(".dev"), function(el){
+      el.addEventListener("click", function(){ selectDevice(el.getAttribute("data-id"), true); });
+    });
+    ids.forEach(function(id){ upsertMarker(devices[id], positions[devices[id].positionId]); });
+    renderSummary();
     fitAll();
   }
   function selectDevice(id, pan){
@@ -236,6 +316,46 @@
       map.setView(markers[id].getLatLng(), Math.max(map.getZoom(), 15));
       markers[id].openPopup();
     }
+  }
+  $("search").addEventListener("input", renderCards);
+
+  /* ================= events ================= */
+  var EV_LABEL = {
+    motion: "MOVE", geofenceEnter: "ENTER", geofenceExit: "EXIT",
+    deviceOnline: "ONLINE", deviceOffline: "OFFLINE", ignitionOn: "IGN ON", ignitionOff: "IGN OFF"
+  };
+  function evClass(t){
+    if (t === "motion") return "t-motion";
+    if (t === "geofenceEnter" || t === "geofenceExit") return "t-geofence";
+    if (t === "deviceOnline" || t === "ignitionOn") return "t-online";
+    if (t === "deviceOffline" || t === "ignitionOff") return "t-offline";
+    return "";
+  }
+  function ingestEvents(list){
+    if (!list) return;
+    events = (list || []).slice(0, 12);
+    var box = $("events");
+    if (!events.length){
+      box.innerHTML = '<div class="ev" style="border-style:dashed;color:var(--sub)">No events yet</div>';
+      return;
+    }
+    var html = "";
+    events.forEach(function(e){
+      var devName = devices[e.deviceId] ? devices[e.deviceId].name : ("device " + e.deviceId);
+      var label = EV_LABEL[e.type] || e.type;
+      var extra = e.attributes && e.attributes.geofenceName ? " &middot; " + esc(e.attributes.geofenceName) : "";
+      html += '<div class="ev ' + evClass(e.type) + '"><span class="et">' + esc(label) + "</span>" +
+              '<span class="en">' + esc(devName) + extra + "</span>" +
+              '<span class="ew">' + ago(e.eventTime || e.serverTime) + "</span></div>";
+    });
+    box.innerHTML = html;
+  }
+  function loadEvents(){
+    var from = new Date(Date.now() - 864e5).toISOString();
+    fetch("/api/events?from=" + encodeURIComponent(from), { credentials: "same-origin" })
+      .then(function(r){ return r.ok ? r.json() : []; })
+      .then(function(list){ ingestEvents(list); })
+      .catch(function(){});
   }
 
   /* ================= data ================= */
@@ -259,9 +379,13 @@
       .then(function(dList){ ingest(dList, null); })
       .catch(function(e){ if (String(e.message) === "auth") showLogin(); });
   }
+  function setConn(mode, txt){
+    $("live-dot").className = mode;
+    $("conn-txt").textContent = txt;
+  }
   function startPolling(){
     stopStreams();
-    $("conn-txt").textContent = "polling";
+    setConn("poll", "polling");
     pollTimer = setInterval(loadAll, POLL_MS);
     loadAll();
   }
@@ -270,17 +394,18 @@
     try { socket = new WebSocket(proto + location.host + "/api/socket"); }
     catch(e){ startPolling(); return; }
     var opened = false;
-    socket.onopen = function(){ opened = true; $("conn-txt").textContent = "live"; };
+    socket.onopen = function(){ opened = true; setConn("", "live"); loadEvents(); };
     socket.onmessage = function(ev){
       try {
         var msg = JSON.parse(ev.data);
         if (msg.type === "devices") ingest(msg.data, null);
         if (msg.type === "positions") ingest(null, msg.data);
+        if (msg.type === "events") loadEvents();
       } catch(e){}
     };
     socket.onclose = socket.onerror = function(){
       socket = null;
-      if (opened || !pollTimer) startPolling();   // graceful degradation
+      if (opened || !pollTimer) startPolling();
     };
   }
   function stopStreams(){
@@ -306,7 +431,11 @@
       return r.json();
     }).then(function(){
       showApp(); fitted = false; devices = {}; positions = {};
-      Object.keys(markers).forEach(function(k){ map.removeLayer(markers[k]); delete markers[k]; });
+      Object.keys(markers).forEach(function(k){
+        map.removeLayer(markers[k]);
+        if (markers[k]._acc) map.removeLayer(markers[k]._acc);
+        delete markers[k];
+      });
       startSocket();
     }).catch(function(e){
       $("login-err").textContent = e.message || "Sign-in failed.";
