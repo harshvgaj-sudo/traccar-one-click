@@ -77,6 +77,18 @@ The server runs on your PC. **PC on = live tracking. PC off/asleep = live view p
 
 Track **your own devices**, or other people only with their knowledge and consent. Covert tracking of another person's phone or vehicle is a criminal offence in many jurisdictions (in India: IPC §354D stalking, up to 3 years). This kit is built for families who all agree to share — the mutual-consent model.
 
+## Portable mode (no admin, no install — tested live)
+
+The whole server can run without installing anything:
+
+1. Download `traccar-other-6.16.0.zip` (GitHub releases) → extract to `server\`
+2. Download a portable JRE 21 (Temurin) → extract to `jre21\` (Traccar 6 requires Java 21; a system Java 17 will NOT work)
+3. Double-click `START-SERVER.bat` / `STOP-SERVER.bat`
+
+First run creates the database in `server\data\`. **Traccar 6 has no default account** — create the admin by inserting a user row (PBKDF2-HMAC-SHA256, 200,000 iterations, 24-byte salt, format `PBKDF2WithHmacSHA256$200000$<hex>`), or register on a build that still ships the registration endpoint.
+
+On Windows, allow LAN devices once: right-click `ALLOW-LAN-8082.bat` → Run as administrator.
+
 ## Security audit (2026-10-31)
 
 **File authenticity — measured, hashes pinned so tampering is detectable:**
@@ -100,7 +112,7 @@ Track **your own devices**, or other people only with their knowledge and consen
 - The one weak point left is the dashboard password — the setup opens the page to change `admin`/`admin` immediately.
 - Binaries are intentionally NOT committed to git (GitHub blocks >100 MB files); the hashes above are the integrity anchor — re-verify after any re-download.
 
-**Not yet tested (needs the server actually installed):** live probing of the running dashboard — auth brute-force resistance, HTTP header audit, port scan. That is the final verification step, pending the owner's go-ahead.
+**Live attack test (portable build, 2026-10-31 evening):** default admin/admin does not exist in Traccar 6 (verified — 401; first user must be created). Unauthenticated API returns 401. Password hashing measured: PBKDF2-HMAC-SHA256 × 200,000 ≈ 70 ms per guess (vs 10 ms for nonexistent users — the cost is the natural rate limiter). No account lockout exists; a random 18-character password is the mitigation. Error responses leak Java stack traces (server internals; low risk on a private network). No HTTP security headers; `Server: Jetty(12.1.13)` banner exposed. Nothing is exposed to the public internet in portable mode.
 
 ## Credits
 

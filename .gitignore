@@ -3,3 +3,7 @@
 *.zip
 *.exe
 *.apk
+
+# Portable runtime + live server data (contains your location database)
+server/
+jre21/
