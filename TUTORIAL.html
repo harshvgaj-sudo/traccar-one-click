@@ -127,6 +127,19 @@
 </div>
 
 <div class="card">
+  <div class="stepnum">7</div>
+  <h2>Simple View — your clean personal map (built into this kit)</h2>
+  <p>The stock dashboard is for fleets. For everyday use, open the <span class="k">Simple View</span> — the setup script installs it automatically:</p>
+  <span class="big">http://localhost:8082/simple-view.html</span>
+  <p>From anywhere on your phone (same Tailscale network): <code>http://100.x.y.z:8082/simple-view.html</code>. Login = same email/password as the dashboard.</p>
+  <ul>
+    <li>One clean map + a card per device: status dot, speed, battery, "updated X ago"</li>
+    <li>Anything not updated in 10 minutes turns amber and says <span class="k">STALE</span> — a frozen pin never lies to you</li>
+    <li>Dark mode by default, OpenStreetMap tiles (no Google, no API keys)</li>
+  </ul>
+</div>
+
+<div class="card">
   <h2>Make it reliable on Android (important)</h2>
   <ul>
     <li>Settings → Apps → Traccar Client → Battery → <span class="k">Unrestricted / Don't optimize</span> — otherwise Android kills tracking to save battery (Xiaomi/Samsung/Oppo are the worst for this)</li>

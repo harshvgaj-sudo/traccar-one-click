@@ -42,6 +42,7 @@ echo  Leave Username and Password EMPTY in the
 echo  app - the Device Identifier is your key.
 echo ============================================
 echo.
-echo Dashboard on this PC : http://localhost:8082
+echo Dashboard on this PC  : http://localhost:8082
+echo Simple View (clean UI): http://%TSIP%:8082/simple-view.html
 echo Same address works on home WiFi and outside.
 pause

@@ -103,6 +103,18 @@ net start traccar 2>nul
 set "TSCMD=tailscale"
 if exist "%ProgramFiles%\Tailscale\tailscale.exe" set "TSCMD=%ProgramFiles%\Tailscale\tailscale.exe"
 
+echo Installing Simple View (the clean personal viewer)...
+set "TZWEB=%ProgramFiles%\Traccar\web"
+if not exist "%TZWEB%" set "TZWEB=%ProgramFiles(x86)%\Traccar\web"
+if exist "%TZWEB%" (
+    if exist "%~dp0simple-view.html" (
+        copy /y "%~dp0simple-view.html" "%TZWEB%\simple-view.html" >nul
+        echo [OK] Simple View installed.
+    )
+) else (
+    echo [NOTE] Traccar web folder not found - Simple View not copied.
+)
+
 echo Starting Tailscale login. A browser window will open.
 echo SIGN IN WITH GITHUB (not Google). This is one time only.
 %TSCMD% up
@@ -110,10 +122,12 @@ echo SIGN IN WITH GITHUB (not Google). This is one time only.
 start http://localhost:8082
 echo.
 echo ============================================
-echo   SETUP DONE. Last two things:
+echo   SETUP DONE. Last three things:
 echo   1. In the dashboard, login with admin / admin,
 echo      then CHANGE the password.
 echo   2. Run SHOW-PHONE-ADDRESS.bat to get the
 echo      address to type into the phone app.
+echo   3. Your clean viewer lives at:
+echo      http://localhost:8082/simple-view.html
 echo ============================================
 pause

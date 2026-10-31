@@ -18,9 +18,25 @@ Every "find my family" app wants a Google login, a subscription, or both. This k
 
 | File | What it does |
 |---|---|
-| `SETUP-TRACKER.bat` | Downloads Traccar server, installs it as an auto-start Windows service, installs Tailscale, opens the dashboard + login |
+| `SETUP-TRACKER.bat` | Downloads Traccar server, installs it as an auto-start Windows service, installs Tailscale, installs Simple View, opens the dashboard + login |
 | `SHOW-PHONE-ADDRESS.bat` | Prints the exact URL to type into the phone app |
+| `simple-view.html` | **Simple View** — our own clean personal viewer (single file, no build step). Auto-installed by the setup script. |
 | `TUTORIAL.html` | Step-by-step illustrated guide with troubleshooting |
+
+## Simple View (the missing piece we built)
+
+The stock Traccar dashboard is built for fleets — powerful, but busy. `simple-view.html` is what a personal tracker should look like:
+
+- **One map, your people** — OpenStreetMap tiles (no Google Maps, no API key, no billing)
+- **Device cards** — online/offline/stale dot, speed, battery %, "updated 2 min ago"
+- **Stale detection** — anything older than 10 minutes turns amber and says STALE, so a frozen pin never lies to you
+- **Live via WebSocket** with automatic fallback to polling
+- **Dark mode by default**, one-tap toggle
+- **Zero dependencies to install** — one HTML file served by Traccar itself (same origin = no CORS, no extra server), works in any phone or desktop browser
+
+Open it at `http://localhost:8082/simple-view.html` (or from anywhere: `http://<tailnet-ip>:8082/simple-view.html`). Login = your Traccar dashboard login.
+
+MIT-licensed original code. Map tiles © OpenStreetMap contributors (fine for personal use). Leaflet 1.9 (BSD-2) from CDN.
 
 ## Quick start
 
