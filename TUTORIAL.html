@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traccar Personal Tracker — Setup Tutorial</title>
+<style>
+  :root{
+    --ink:#0f172a; --sub:#475569; --bg:#f8fafc; --card:#ffffff;
+    --line:#e2e8f0; --accent:#0d9488; --accent-soft:#ccfbf1;
+    --gold:#f59e0b; --warn:#b45309; --warn-bg:#fffbeb; --warn-line:#fde68a;
+    --code:#0f172a; --code-bg:#f1f5f9;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif; background:var(--bg); color:var(--ink); line-height:1.6; padding:40px 16px;}
+  .wrap{max-width:760px; margin:0 auto;}
+  header{margin-bottom:28px;}
+  h1{font-size:1.9rem; letter-spacing:-.02em;}
+  .tagline{color:var(--sub); margin-top:6px;}
+  .badges{margin-top:14px; display:flex; gap:8px; flex-wrap:wrap;}
+  .badge{background:var(--accent-soft); color:#0f766e; font-size:.78rem; font-weight:600; padding:4px 12px; border-radius:999px;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:24px 26px; margin-bottom:20px;}
+  .stepnum{display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:10px; background:var(--accent); color:#fff; font-weight:700; margin-bottom:10px; font-size:1.05rem;}
+  h2{font-size:1.2rem; margin-bottom:10px;}
+  p{margin-bottom:10px;}
+  .sub{color:var(--sub); font-size:.92rem;}
+  .truth{background:var(--warn-bg); border:1px solid var(--warn-line); border-radius:14px; padding:18px 22px; margin-bottom:20px;}
+  .truth h2{color:var(--warn); font-size:1.05rem;}
+  code{font-family:Consolas,'Courier New',monospace; background:var(--code-bg); border:1px solid var(--line); border-radius:6px; padding:1px 7px; font-size:.9em; color:var(--code); word-break:break-all;}
+  .big{display:block; background:var(--code-bg); border:1px dashed var(--accent); border-radius:10px; padding:12px 16px; margin:12px 0; font-size:1.05rem; font-weight:600; color:var(--code); text-align:center;}
+  ol{margin:0 0 10px 22px;} ul{margin:0 0 10px 22px;}
+  li{margin-bottom:6px;}
+  table{width:100%; border-collapse:collapse; margin:10px 0; font-size:.92rem;}
+  th,td{border:1px solid var(--line); padding:8px 12px; text-align:left; vertical-align:top;}
+  th{background:var(--code-bg); font-weight:600;}
+  .file{font-weight:700; color:var(--accent);}
+  .gold{border:2px solid var(--gold);}
+  .gold .stepnum{background:var(--gold);}
+  a{color:var(--accent); text-decoration:none; border-bottom:1px dotted var(--accent);}
+  .foot{color:var(--sub); font-size:.85rem; text-align:center; margin-top:26px;}
+  .k{font-weight:700;}
+  @media print{ body{padding:0; background:#fff;} .card{break-inside:avoid;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Traccar Personal Tracker</h1>
+  <p class="tagline">Your own location tracker. No Google account. No subscriptions. Your data stays on your PC.</p>
+  <div class="badges">
+    <span class="badge">Server: Traccar v6.16.0 (Apache-2.0)</span>
+    <span class="badge">Phone app: Traccar Client v10.2.4 (APK)</span>
+    <span class="badge">Network: Tailscale (GitHub login)</span>
+  </div>
+</header>
+
+<div class="truth">
+  <h2>Read this first — the one honest caveat</h2>
+  <p>The tracker server runs on your PC. <span class="k">When the PC is on, tracking is live. When the PC is off or asleep, history pauses</span> — it does not record your location during that time. Keep the PC on (or plugged in with sleep disabled) on days you want tracking. Later, if you want 24/7 tracking, the same Traccar server can be moved to a small cloud VM — ask and it can be set up.</p>
+</div>
+
+<div class="card">
+  <div class="stepnum">1</div>
+  <h2>On the PC — run <span class="file">SETUP-TRACKER.bat</span></h2>
+  <p>Double-click it. It does everything by itself:</p>
+  <ol>
+    <li>Downloads the official Traccar server (≈100 MB) and installs it as a Windows service that starts automatically with your PC</li>
+    <li>Installs Tailscale — your private network that lets your phone reach this PC from anywhere, even on mobile data</li>
+    <li>Opens a browser for Tailscale login — <span class="k">sign in with GitHub, NOT Google</span> (one time only)</li>
+    <li>Opens the Traccar dashboard</li>
+  </ol>
+  <p class="sub">If the silent install fails, the script opens the normal installer — just click Next, Next, Finish, then run the script once more.</p>
+</div>
+
+<div class="card">
+  <div class="stepnum">2</div>
+  <h2>On the PC — secure the dashboard</h2>
+  <ol>
+    <li>Open <code>http://localhost:8082</code></li>
+    <li>Login: user <code>admin</code>, password <code>admin</code></li>
+    <li>Top-right menu → <span class="k">Account</span> → <span class="k">CHANGE THE PASSWORD</span> (this is the only password protecting your data)</li>
+  </ol>
+</div>
+
+<div class="card">
+  <div class="stepnum">3</div>
+  <h2>On the PC — run <span class="file">SHOW-PHONE-ADDRESS.bat</span></h2>
+  <p>It prints the exact address your phone needs. It looks like:</p>
+  <span class="big">http://100.x.y.z:8082</span>
+  <p class="sub">This is your PC's private Tailscale address. It works on home WiFi <em>and</em> outside on mobile data — same address, always. No port forwarding, and nobody outside your devices can reach it.</p>
+</div>
+
+<div class="card">
+  <div class="stepnum">4</div>
+  <h2>On the phone — install the app</h2>
+  <ol>
+    <li><span class="k">Android:</span> download the official APK (v10.2.4, built 30 Oct 2026, 68 MB, direct from GitHub — no Play Store, no Google):
+      <br><a href="https://github.com/traccar/traccar-client/releases/download/v10.2.4/app-release.apk">github.com/traccar/traccar-client/releases/download/v10.2.4/app-release.apk</a>
+      <br>When installing, allow "install unknown apps" for your browser (Android asks once).</li>
+    <li><span class="k">iPhone:</span> install "Traccar Client" from the App Store (free).</li>
+    <li>Install <span class="k">Tailscale</span> on the phone too (Play Store / App Store / tailscale.com) and sign in with the <span class="k">same GitHub account</span> you used on the PC.</li>
+  </ol>
+</div>
+
+<div class="card">
+  <div class="stepnum">5</div>
+  <h2>On the phone — two settings, that's all</h2>
+  <ol>
+    <li>Open Traccar Client → <span class="k">Server URL</span> → type the address from Step 3, e.g. <code>http://100.x.y.z:8082</code> → leave Username and Password <span class="k">empty</span></li>
+    <li>Tap the <span class="k">status / device identifier</span> row → long-press to <span class="k">copy the Device Identifier</span> (a long code like <code>ic0pf4qcmg1x0etqzkwv</code>)</li>
+    <li>Press Start / enable tracking, and allow location permission "<span class="k">Allow all the time</span>"</li>
+  </ol>
+</div>
+
+<div class="card gold">
+  <div class="stepnum">6</div>
+  <h2>Back on the PC — see yourself move (the payoff)</h2>
+  <ol>
+    <li>Dashboard → <span class="k">Devices</span> → <span class="k">+ Add</span> → Name: your phone's name → <span class="k">Identifier: paste the code</span> from the phone → Save</li>
+    <li>Watch the dot appear and follow you live.</li>
+  </ol>
+  <p class="sub">Repeat steps 4–6 for every phone you want to track. Each phone gets its own identifier automatically — that IS the login. No accounts anywhere.</p>
+</div>
+
+<div class="card">
+  <h2>Make it reliable on Android (important)</h2>
+  <ul>
+    <li>Settings → Apps → Traccar Client → Battery → <span class="k">Unrestricted / Don't optimize</span> — otherwise Android kills tracking to save battery (Xiaomi/Samsung/Oppo are the worst for this)</li>
+    <li>In the app: Accuracy = High, and keep the default interval (or set 30–60 seconds to save battery)</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>Troubleshooting</h2>
+  <table>
+    <tr><th>Symptom</th><th>Fix</th></tr>
+    <tr><td>Phone can't connect</td><td>Tailscale must be signed in on <em>both</em> PC and phone. Check the phone's Tailscale app is connected (toggle on).</td></tr>
+    <tr><td>Dot not moving</td><td>Battery optimization killed the app (see above). Also check tracking is started in the app.</td></tr>
+    <tr><td>Wrong address / 100.x.y.z changed</td><td>Rerun <span class="file">SHOW-PHONE-ADDRESS.bat</span> — the address is stable but re-verify after reinstalling Tailscale.</td></tr>
+    <tr><td>Dashboard unreachable</td><td>Run <code>services.msc</code> → find "traccar" → Start. Or rerun the setup script.</td></tr>
+    <tr><td>iOS updates sparse</td><td>Apple throttles background GPS on any app. This is Apple's limit, not the app's.</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Verified links &amp; versions (checked 31 Oct 2026)</h2>
+  <table>
+    <tr><th>Piece</th><th>Version</th><th>Source</th></tr>
+    <tr><td>Traccar server (Windows)</td><td>6.16.0</td><td><a href="https://github.com/traccar/traccar/releases/download/v6.16.0/traccar-windows-64-6.16.0.zip">github.com/traccar/traccar → releases</a></td></tr>
+    <tr><td>Traccar Client APK (Android)</td><td>10.2.4 (30 Oct 2026)</td><td><a href="https://github.com/traccar/traccar-client/releases/download/v10.2.4/app-release.apk">direct APK, 68.1 MB</a> — sha256 <code>4108250e…897e19</code></td></tr>
+    <tr><td>Traccar Client (iOS)</td><td>App Store</td><td>search "Traccar Client"</td></tr>
+    <tr><td>Tailscale</td><td>stable</td><td><a href="https://pkgs.tailscale.com/stable/tailscale-setup-latest.exe">pkgs.tailscale.com/stable</a></td></tr>
+    <tr><td>Source code</td><td>—</td><td><a href="https://github.com/traccar/traccar">github.com/traccar/traccar</a> · <a href="https://github.com/traccar/traccar-client">github.com/traccar/traccar-client</a></td></tr>
+  </table>
+  <p class="sub">Privacy: the phone app sends location ONLY to the address you type — in this setup, your own PC on your own private network. No third party, no Google, no analytics.</p>
+</div>
+
+<p class="foot">Generated 2026-10-31 · Traccar is Apache-2.0 · Tailscale client is open source · Setup scripts by WorkBuddy</p>
+</div>
+</body>
+</html>
