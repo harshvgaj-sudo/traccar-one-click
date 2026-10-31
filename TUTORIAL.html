@@ -50,14 +50,15 @@
   <p class="tagline">Your own location tracker. No Google account. No subscriptions. Your data stays on your PC.</p>
   <div class="badges">
     <span class="badge">Server: Traccar v6.16.0 (Apache-2.0)</span>
-    <span class="badge">Phone app: Traccar Client v10.2.4 (APK)</span>
+    <span class="badge">Android app: Colota v1.21 (recommended) / Traccar Client</span>
+    <span class="badge">Viewer: Traccar Manager</span>
     <span class="badge">Network: Tailscale (GitHub login)</span>
   </div>
 </header>
 
 <div class="truth">
   <h2>Read this first — the one honest caveat</h2>
-  <p>The tracker server runs on your PC. <span class="k">When the PC is on, tracking is live. When the PC is off or asleep, history pauses</span> — it does not record your location during that time. Keep the PC on (or plugged in with sleep disabled) on days you want tracking. Later, if you want 24/7 tracking, the same Traccar server can be moved to a small cloud VM — ask and it can be set up.</p>
+  <p>The tracker server runs on your PC. <span class="k">When the PC is on, tracking is live. When the PC is off or asleep, the live view pauses.</span> With <span class="k">Colota</span> on Android this is minor: it queues points on the phone and back-fills them automatically when the PC returns — history is delayed, not lost. On iOS (Traccar Client) points during PC-off windows are not recorded. Keep the PC on (or plugged in with sleep disabled) for the best experience — and later, the same server can move to a small cloud VM for 24/7 tracking.</p>
 </div>
 
 <div class="card">
@@ -95,11 +96,14 @@
   <div class="stepnum">4</div>
   <h2>On the phone — install the app</h2>
   <ol>
-    <li><span class="k">Android:</span> download the official APK (v10.2.4, built 30 Oct 2026, 68 MB, direct from GitHub — no Play Store, no Google):
-      <br><a href="https://github.com/traccar/traccar-client/releases/download/v10.2.4/app-release.apk">github.com/traccar/traccar-client/releases/download/v10.2.4/app-release.apk</a>
+    <li><span class="k">Android — recommended: Colota</span> (modern simple UI, dark mode, no Google services, queues points while offline):
+      <br>APK v1.21.0 direct (43 MB): <a href="https://f-droid.org/repo/com.Colota_53.apk">f-droid.org/repo/com.Colota_53.apk</a> · or via the <a href="https://f-droid.org/en/F-Droid.apk">F-Droid app</a> (search "Colota")
       <br>When installing, allow "install unknown apps" for your browser (Android asks once).</li>
-    <li><span class="k">iPhone:</span> install "Traccar Client" from the App Store (free).</li>
-    <li>Install <span class="k">Tailscale</span> on the phone too (Play Store / App Store / tailscale.com) and sign in with the <span class="k">same GitHub account</span> you used on the PC.</li>
+    <li><span class="k">Android — alternative: Traccar Client</span> (official, two-field simple):
+      <br><a href="https://github.com/traccar/traccar-client/releases/download/v10.2.4/app-release.apk">github.com/traccar/traccar-client/releases/download/v10.2.4/app-release.apk</a> (v10.2.4, 68 MB)</li>
+    <li><span class="k">iPhone:</span> install "Traccar Client" from the App Store (free) — iOS has no APK choice.</li>
+    <li><span class="k">Everyone:</span> install <span class="k">Tailscale</span> on the phone too (Play Store / App Store / tailscale.com) and sign in with the <span class="k">same GitHub account</span> you used on the PC.</li>
+    <li><span class="k">Bonus:</span> on any phone that should only VIEW the map, install <span class="k">Traccar Manager</span> — one clean live-map screen, no tracking needed.</li>
   </ol>
 </div>
 
@@ -107,8 +111,7 @@
   <div class="stepnum">5</div>
   <h2>On the phone — two settings, that's all</h2>
   <ol>
-    <li>Open Traccar Client → <span class="k">Server URL</span> → type the address from Step 3, e.g. <code>http://100.x.y.z:8082</code> → leave Username and Password <span class="k">empty</span></li>
-    <li>Tap the <span class="k">status / device identifier</span> row → long-press to <span class="k">copy the Device Identifier</span> (a long code like <code>ic0pf4qcmg1x0etqzkwv</code>)</li>
+    <li><span class="k">Colota:</span> add a backend → choose <span class="k">Traccar</span> as the type → Server URL = the address from Step 3 (e.g. <code>http://100.x.y.z:8082</code>) → the app has a device-ID / identifier field — copy that code. (Traccar Client: same two fields, leave Username/Password empty.)</li>
     <li>Press Start / enable tracking, and allow location permission "<span class="k">Allow all the time</span>"</li>
   </ol>
 </div>
@@ -137,6 +140,7 @@
     <tr><th>Symptom</th><th>Fix</th></tr>
     <tr><td>Phone can't connect</td><td>Tailscale must be signed in on <em>both</em> PC and phone. Check the phone's Tailscale app is connected (toggle on).</td></tr>
     <tr><td>Dot not moving</td><td>Battery optimization killed the app (see above). Also check tracking is started in the app.</td></tr>
+    <tr><td>PC was off — is history lost?</td><td>With <span class="k">Colota</span>: no — it queues points on the phone and back-fills them when the PC returns. With Traccar Client/iOS: points during that window are not recorded.</td></tr>
     <tr><td>Wrong address / 100.x.y.z changed</td><td>Rerun <span class="file">SHOW-PHONE-ADDRESS.bat</span> — the address is stable but re-verify after reinstalling Tailscale.</td></tr>
     <tr><td>Dashboard unreachable</td><td>Run <code>services.msc</code> → find "traccar" → Start. Or rerun the setup script.</td></tr>
     <tr><td>iOS updates sparse</td><td>Apple throttles background GPS on any app. This is Apple's limit, not the app's.</td></tr>
@@ -149,6 +153,8 @@
     <tr><th>Piece</th><th>Version</th><th>Source</th></tr>
     <tr><td>Traccar server (Windows)</td><td>6.16.0</td><td><a href="https://github.com/traccar/traccar/releases/download/v6.16.0/traccar-windows-64-6.16.0.zip">github.com/traccar/traccar → releases</a></td></tr>
     <tr><td>Traccar Client APK (Android)</td><td>10.2.4 (30 Oct 2026)</td><td><a href="https://github.com/traccar/traccar-client/releases/download/v10.2.4/app-release.apk">direct APK, 68.1 MB</a> — sha256 <code>4108250e…897e19</code></td></tr>
+    <tr><td>Colota (Android — recommended UI)</td><td>1.21.0 (25 Oct 2026)</td><td><a href="https://f-droid.org/repo/com.Colota_53.apk">direct APK, 43 MB</a> · <a href="https://f-droid.org/packages/com.Colota">F-Droid page</a> — AGPL-3.0, no Google services, offline queue</td></tr>
+    <tr><td>Traccar Manager (viewer app)</td><td>current (Oct 2026)</td><td>Play Store / App Store — <a href="https://github.com/traccar/traccar-manager">source</a></td></tr>
     <tr><td>Traccar Client (iOS)</td><td>App Store</td><td>search "Traccar Client"</td></tr>
     <tr><td>Tailscale</td><td>stable</td><td><a href="https://pkgs.tailscale.com/stable/tailscale-setup-latest.exe">pkgs.tailscale.com/stable</a></td></tr>
     <tr><td>Source code</td><td>—</td><td><a href="https://github.com/traccar/traccar">github.com/traccar/traccar</a> · <a href="https://github.com/traccar/traccar-client">github.com/traccar/traccar-client</a></td></tr>

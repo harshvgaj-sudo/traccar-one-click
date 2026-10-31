@@ -27,20 +27,35 @@ Every "find my family" app wants a Google login, a subscription, or both. This k
 1. **PC:** double-click `SETUP-TRACKER.bat` → sign in to Tailscale with GitHub (one time)
 2. **PC:** open `http://localhost:8082` → login `admin`/`admin` → **change the password**
 3. **PC:** double-click `SHOW-PHONE-ADDRESS.bat` → note the address (like `http://100.x.y.z:8082`)
-4. **Phone:** install [Traccar Client](https://github.com/traccar/traccar-client/releases/latest) (APK or App Store) + Tailscale → paste the address → copy the Device Identifier
+4. **Phone:** install a tracker app (see below) + Tailscale → paste the address → copy the Device Identifier
 5. **PC:** dashboard → Devices → Add → paste the identifier → watch the dot move
 
 Full details with screenshots-level specificity: open `TUTORIAL.html`.
+
+## Which phone apps to use (the simple-UI stack)
+
+The Traccar *server* is the engine — it is boring, bulletproof infrastructure. For everyday use, these are the friendly faces on top (all verified maintained as of Oct 2026):
+
+| Job | App | Why |
+|---|---|---|
+| **Send location (Android)** | [Colota](https://f-droid.org/packages/com.Colota) v1.21+ | Modern clean UI, dark mode, **queues points offline and back-fills when your PC comes back**, tracking profiles that auto-save battery, FOSS build with **zero Google Play Services**, AGPL-3.0, no telemetry |
+| **Send location (Android, alternative)** | [Traccar Client](https://github.com/traccar/traccar-client/releases) v10.2+ | The official client, simplest possible two-field setup |
+| **Send location (iPhone)** | Traccar Client (App Store) | Apple gives no other realistic choice for background GPS |
+| **See everyone (phone)** | [Traccar Manager](https://github.com/traccar/traccar-manager) | One clean live map of all devices + notifications — much simpler than the web dashboard |
+
+Colota's offline queue also softens the big caveat below: with Colota on Android, points recorded while the PC is off are **queued on the phone and back-filled automatically** when the server returns — history is delayed, not lost.
 
 ## Versions (verified at release)
 
 - Traccar server **v6.16.0** — https://github.com/traccar/traccar
 - Traccar Client **v10.2.4** (Android APK, 68 MB) — https://github.com/traccar/traccar-client/releases
+- Traccar Manager — https://github.com/traccar/traccar-manager (updated Oct 2026)
+- Colota **v1.21.0** (Android, F-Droid) — https://f-droid.org/packages/com.Colota
 - Tailscale (stable) — https://pkgs.tailscale.com/stable/
 
 ## The honest caveat
 
-The server runs on your PC. **PC on = live tracking. PC off/asleep = history pauses** during that window. For 24/7 tracking, move the same Traccar server to a small cloud VM (any ₹200+/month VPS or an Oracle free tier) — the rest of the setup is identical.
+The server runs on your PC. **PC on = live tracking. PC off/asleep = live view pauses.** With Colota on Android, locations recorded during that window are queued on the phone and sync back automatically — so history survives. On iOS there is no offline queueing; points during PC-off windows are simply not recorded. For true 24/7 live tracking, move the same Traccar server to a small cloud VM (any ₹200+/month VPS or an Oracle free tier) — the rest of the setup is identical.
 
 ## Responsible use
 
